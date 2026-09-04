@@ -1,0 +1,114 @@
+<body>
+<div id="app">
+  <div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+  <canvas id="gl"></canvas>
+  <div id="fx"><div id="flash"></div><div id="announcer"></div><div id="floaters"></div><div id="confetti" class="confetti"></div></div>
+  <div id="ui">
+
+    <!-- LOADING -->
+    <section id="scr-loading" class="screen active">
+      <div class="logo-emoji emoji">🦊</div>
+      <div class="logo">EMOJI RUSH<small>3D BLITZ</small></div>
+      <div id="load-bar" class="bar gold lg"><i style="width:5%"></i></div>
+      <div id="load-tip">Loading 3D engine…</div>
+      <button id="btn-start" class="btn play hidden">TAP TO PLAY</button>
+    </section>
+
+    <!-- HOME -->
+    <section id="scr-home" class="screen">
+      <div class="home-top">
+        <div class="topbar">
+          <div class="lvl" id="lvl-ring" role="button"><div class="ring" style="--p:0"><b id="lvl-num">1</b></div><div class="col" style="gap:2px;min-width:0"><span class="tiny muted nowrap">LEVEL</span><div class="bar xp" style="width:64px"><i id="xp-bar"></i></div></div></div>
+          <button class="pill lives" data-open="lives"><span class="emoji">❤️</span><span class="v" id="hud-lives">5</span><span class="sub tabular" id="hud-lives-timer"></span><span class="plus">+</span></button>
+          <button class="pill coins" data-open="shop:coins"><span class="emoji">🪙</span><span class="v tabular" id="hud-coins">0</span><span class="plus">+</span></button>
+          <button class="pill gems" data-open="shop:gems"><span class="emoji">💎</span><span class="v tabular" id="hud-gems">0</span><span class="plus">+</span></button>
+        </div>
+      </div>
+
+      <aside class="home-side left">
+        <div class="card"><h3>Daily Missions</h3><div id="side-missions" class="list"></div></div>
+        <div class="card"><h3>Season Pass</h3><div id="side-pass"></div></div>
+      </aside>
+
+      <div class="home-mid">
+        <div id="flash-banner" class="flash-banner hidden"></div>
+        <div id="showcase">
+          <div class="rail left">
+            <button class="rbtn glow" data-open="daily"><span class="ic emoji">📅</span><span class="lb">Daily</span><span class="tm" id="rail-daily"></span></button>
+            <button class="rbtn" data-open="missions"><span class="ic emoji">🎯</span><span class="lb">Quests</span><span class="badge hidden" id="badge-missions"></span></button>
+            <button class="rbtn" data-open="wheel"><span class="ic emoji">🎰</span><span class="lb">Spin</span><span class="tm" id="rail-wheel"></span></button>
+            <button class="rbtn" data-open="piggy"><span class="ic emoji">🐷</span><span class="lb">Piggy</span><span class="tm" id="rail-piggy"></span></button>
+          </div>
+          <div class="rail right">
+            <button class="rbtn" data-open="pass"><span class="ic emoji">🎟️</span><span class="lb">Pass</span><span class="badge hidden" id="badge-pass"></span></button>
+            <button class="rbtn" data-open="event"><span class="ic emoji">🌪️</span><span class="lb">Event</span><span class="tm" id="rail-event"></span></button>
+            <button class="rbtn" data-open="leaderboard"><span class="ic emoji">🏆</span><span class="lb">Ranks</span></button>
+            <button class="rbtn" data-open="settings"><span class="ic emoji">⚙️</span><span class="lb">Settings</span></button>
+          </div>
+          <button class="showcase-caption" id="showcase-caption" data-open="leaderboard"></button>
+        </div>
+        <div class="home-bottom">
+          <button class="card hero-card" id="hero-card" data-open="heroes">
+            <div class="he emoji" id="hc-emoji">🦊</div>
+            <div class="body" style="flex:1;min-width:0;text-align:left">
+              <div class="hn"><span id="hc-name">Foxy</span><span class="rtag" id="hc-rar">Common</span><span class="lv" id="hc-lvl">Lv 1</span></div>
+              <div class="hp" id="hc-power">Power: Clear a row</div>
+            </div>
+            <div class="muted" style="font-size:22px">›</div>
+          </button>
+          <div class="boost-strip" id="boost-strip"></div>
+          <div class="play-wrap">
+            <button class="btn play green" id="btn-play">PLAY<small id="play-sub">1 life</small></button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="home-side right">
+        <div class="card"><h3>Leaderboard</h3><div id="side-lb" class="list" style="gap:4px"></div></div>
+        <div class="card"><h3>Best Scores</h3><div id="side-stats" class="stat-grid"></div></div>
+      </aside>
+
+      <nav class="nav home-nav">
+        <button data-open="shop"><span class="ic emoji">🛍️</span>Shop<span class="badge" id="badge-shop">!</span></button>
+        <button data-open="heroes"><span class="ic emoji">🎭</span>Heroes<span class="badge hidden" id="badge-heroes"></span></button>
+        <button data-open="play" class="hot"><span class="ic emoji">🎮</span>Play</button>
+        <button data-open="boxes"><span class="ic emoji">🎁</span>Boxes<span class="badge hidden" id="badge-boxes"></span></button>
+        <button data-open="leaderboard"><span class="ic emoji">🏆</span>Ranks</button>
+      </nav>
+    </section>
+
+    <!-- GAME -->
+    <section id="scr-game" class="screen">
+      <aside class="side left">
+        <div class="card"><h3>Match</h3><div class="stat-grid" id="g-side-stats"></div></div>
+        <div class="card"><h3>Controls</h3><div class="small muted col"><span><kbd>Drag</kbd> or <kbd>Click</kbd> two emoji to swap</span><span><kbd>Space</kbd> use power when charged</span><span><kbd>Esc</kbd> pause</span></div></div>
+      </aside>
+      <div class="hud">
+        <button class="btn icon ghost" id="btn-pause">⏸</button>
+        <div class="score"><div class="v tabular" id="g-score">0</div><div class="b" id="g-best">BEST 0</div></div>
+        <div class="timer" id="g-timer-wrap"><div class="v" id="g-timer">60</div><div class="b">SECONDS</div></div>
+      </div>
+      <div class="meter-wrap"><span class="bl">BLITZ</span><div class="bar meter" id="g-meter"><i></i></div></div>
+      <div id="board-area">
+        <div id="coach" class="coach hidden"></div>
+      </div>
+      <div class="gbottom">
+        <div class="gstat"><span class="ic emoji">🔥</span><b id="g-combo">x1</b>combo</div>
+        <button class="power" id="btn-power" style="--p:0"><b class="emoji" id="power-emoji">🦊</b><span class="lb" id="power-lbl">CHARGE</span></button>
+        <div class="gstat"><span class="ic emoji">🪙</span><b id="g-coins">0</b>coins</div>
+      </div>
+      <aside class="side right">
+        <div class="card"><h3>Top Scores</h3><div id="g-side-lb" class="list" style="gap:4px"></div></div>
+        <div class="card"><h3>Missions</h3><div id="g-side-missions" class="list" style="gap:6px"></div></div>
+      </aside>
+    </section>
+
+  </div>
+  <div id="toasts"></div>
+  <div id="modals"></div>
+  <div id="ad">
+    <div class="ad-top"><span>Sponsored · Rewarded video</span><span class="cnt" id="ad-cnt">30</span><button class="x hidden" id="ad-x">✕</button></div>
+    <div class="ad-creative" id="ad-creative"></div>
+    <div class="ad-lbl">Ad playback is simulated in this build. Reward is granted at completion.</div>
+  </div>
+</div>
